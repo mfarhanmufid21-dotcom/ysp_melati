@@ -1,0 +1,20 @@
+/* Penyesuaian halaman Login & Register agar senada dengan tema boutique */
+:root{--mf-ink:#1b1b1b;--mf-muted:#6d6d6d;--mf-line:#e9e7e2;--mf-soft:#f7f5f0;--mf-accent:#1f5c46;--mf-accent-dark:#164534}
+body{background:var(--mf-soft)!important;font-family:'DM Sans',sans-serif!important;color:var(--mf-ink)}
+.login-card,.register-card{background:#fff!important;border:1px solid var(--mf-line)!important;border-radius:4px!important;box-shadow:0 18px 50px rgba(0,0,0,.06)!important;transform:none!important}
+.login-card:hover,.register-card:hover{transform:none!important}
+.brand-icon{display:none!important}
+.brand-name,.register-card h2{font-family:'Cormorant Garamond',serif!important;font-weight:500!important;letter-spacing:.08em!important;text-transform:uppercase!important;color:var(--mf-ink)!important}
+.brand-name em,.register-card h2 em{font-style:normal!important;color:var(--mf-ink)!important}
+.brand-tagline{letter-spacing:.3em!important;text-transform:uppercase!important;font-size:.66rem!important;color:var(--mf-muted)!important}
+.form-title{font-family:'Cormorant Garamond',serif!important;font-size:1.5rem!important;font-weight:500!important;color:var(--mf-ink)!important}
+.form-control-custom,.form-control,.input-icon input{border:1px solid var(--mf-line)!important;border-radius:2px!important;background:#fff!important;color:var(--mf-ink)!important}
+.form-control-custom:focus,.form-control:focus,.input-icon input:focus{border-color:var(--mf-ink)!important;box-shadow:none!important;outline:none!important}
+.input-icon,.input-icon i{color:var(--mf-muted)!important}
+.btn-login,.btn-register{background:var(--mf-accent)!important;border:1px solid var(--mf-accent)!important;border-radius:0!important;color:#fff!important;font-weight:600!important;letter-spacing:.12em!important;text-transform:uppercase!important;font-size:.82rem!important;box-shadow:none!important;transform:none!important}
+.btn-login:hover,.btn-register:hover{background:var(--mf-accent-dark)!important;border-color:var(--mf-accent-dark)!important;transform:none!important;box-shadow:none!important}
+.register-link,.login-link,.divider{color:var(--mf-muted)!important}
+.register-link a,.login-link a{color:var(--mf-accent)!important;font-weight:600!important}
+.alert,.alert-custom{border-radius:2px!important}
+.mf-back{display:inline-block;margin-bottom:14px;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mf-muted);text-decoration:none}
+.mf-back:hover{color:var(--mf-ink)}

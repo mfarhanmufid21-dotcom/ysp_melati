@@ -1,0 +1,22 @@
+PERBAIKAN TAMPILAN AREA USER - YSP Jasmine
+===========================================
+Salin isi folder ini ke root proyek (ysp_melati/), timpa jika diminta.
+
+FILE BARU
+- public/assets/css/mf-user.css            -> gaya halaman akun (tema Clean Boutique)
+- app/Helpers/akun_helper.php              -> fungsi bantu (status, tanggal, rupiah)
+- app/Views/User/layout/akun_menu.php      -> menu akun (kiri di desktop, tab di HP)
+- app/Views/User/layout/modal_profil.php   -> modal Edit Profil (satu modal untuk semua halaman)
+
+FILE YANG DIGANTI
+- app/Views/User/shop/dashboard.php
+- app/Views/User/shop/riwayat.php
+- app/Views/User/layout/navbar.php         -> kini hanya memanggil header + modal_profil
+- app/Controllers/User.php                 -> dashboard() juga mengirim data pelanggan;
+                                              respon getProfile/updateProfile menyertakan csrf_hash
+
+CATATAN
+- Route, nama kolom, dan alur data tidak berubah.
+- Modal Edit Profil kini hanya ada satu (#editProfileModalNavbar) dan juga tampil di
+  halaman Riwayat. Cart & Checkout otomatis ikut tampilan baru karena memakai navbar.php.
+- Setelah menimpa file, tekan Ctrl+F5 agar CSS terbaru termuat.

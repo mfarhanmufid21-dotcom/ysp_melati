@@ -1,0 +1,32 @@
+PERBAIKAN TAMPILAN AREA ADMIN - YSP Jasmine
+===========================================
+Salin isi folder ini ke root proyek (ysp_melati/), timpa jika diminta.
+
+FILE BARU
+- public/assets/css/mf-admin.css   -> tema admin "Clean Boutique" (token warna & font sama
+                                      dengan mf-theme.css sisi pelanggan)
+
+FILE YANG DIGANTI
+- app/Views/Admin/layout/admin.php -> layout baru: sidebar putih bergaris tipis, grup menu
+                                      (Ringkasan / Kelola Toko / Laporan), breadcrumb + judul
+                                      serif, tombol "Lihat Toko", dialog konfirmasi keluar,
+                                      lencana jumlah pesanan Pending, menu bisa dikecilkan
+                                      (diingat), menu geser di HP
+- app/Views/Admin/*/*.php          -> hanya penyeragaman warna hex lama (hijau tua/emas)
+                                      ke palet pelanggan; logika, route, id elemen tidak berubah
+
+YANG BERUBAH
+- Banner gradien hijau tua -> kartu putih dengan garis aksen hijau (seperti halaman akun)
+- Kartu/tabel/tombol/form/modal/paginasi/SweetAlert mengikuti gaya pelanggan
+- Font: Cormorant Garamond (judul) + DM Sans (isi)
+- Link "Profil" & "Pengaturan" dihapus dari menu pengguna (route-nya memang tidak ada)
+
+CATATAN
+- Setelah menimpa file, tekan Ctrl+F5 agar CSS terbaru termuat.
+- Nama menu diperjelas: "Pesanan & Transaksi", "Ulasan Pelanggan", "Ringkasan Laporan".
+
+REVISI 2
+- Garis pemisah di sidebar & navbar atas dihapus (garis bawah topbar, garis samping sidebar,
+  garis kepala/kaki sidebar, garis tebal penanda menu aktif, garis bawah teks link).
+  Pemisah diganti bayangan halus & jarak; menu aktif ditandai blok warna hijau muda.
+- Konten dibatasi lebar maksimum & jarak antar kartu dirapikan.

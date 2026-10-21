@@ -5,49 +5,121 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Dashboard::index');
 
+$routes->setDefaultNamespace('App\Controllers');
+$routes->setDefaultController('Shop');
+$routes->setDefaultMethod('index');
+$routes->setTranslateURIDashes(false);
+$routes->set404Override();
 
-//<----- BARANG ------>
-$routes->get('barang', 'Barang::index');
-$routes->get('barang/new', 'Barang::new');
-$routes->post('barang/create', 'Barang::create');
+// ============================================================
+// 1. LANDING PAGE & SHOP (PUBLIC)
+// ============================================================
+$routes->get('/',                                 'Home::index');
+$routes->get('shop',                             'Shop::index');
+$routes->get('shop/search',                      'Shop::index');
+$routes->get('shop/produk/(:num)',               'Shop::detail/$1');
+$routes->get('shop/cart',                        'Shop::cart');
+$routes->get('katalog',                          'Shop::index');
 
-$routes->get('barang/edit/(:num)', 'Barang::edit/$1');
-$routes->post('barang/update/(:num)', 'Barang::update/$1');
+// Halaman informasi (masing-masing punya halaman sendiri)
+$routes->get('best-seller',                      'Pages::bestSeller');
+$routes->get('tentang-kami',                     'Pages::tentang');
+$routes->get('cara-pesan',                       'Pages::caraPesan');
+$routes->get('testimoni',                        'Pages::testimoni');
+$routes->get('kontak',                           'Pages::kontak');
 
-$routes->get('barang/delete/(:num)', 'Barang::delete/$1');
+// ============================================================
+// 2. AUTH
+// ============================================================
+$routes->get('login',           'Auth::login');
+$routes->post('login',          'Auth::prosesLogin');
+$routes->get('logout',          'Auth::logout');
+$routes->get('register',        'Auth::register');
+$routes->post('register',       'Auth::saveRegister');
 
-//<----- PELANGGAN ----->
-$routes->get('pelanggan', 'pelanggan::index');
-$routes->get('pelanggan/new', 'pelanggan::new');
-$routes->post('pelanggan/create', 'pelanggan::create');
+// ============================================================
+// 3. SHOP AJAX
+// ============================================================
+$routes->post('shop/addToCart/(:num)', 'Shop::addToCart/$1');
+$routes->post('shop/updateCart',        'Shop::updateCart'); 
+$routes->post('shop/remove',            'Shop::remove');
+$routes->get('shop/detail/(:num)',      'Shop::detail/$1');
 
-$routes->get('pelanggan/edit/(:num)', 'pelanggan::edit/$1');
-$routes->post('pelanggan/update/(:num)', 'pelanggan::update/$1');
+// ============================================================
+// 4. SHOP – AREA TERPROTEKSI (wajib login)
+// ============================================================
+$routes->group('shop', ['filter' => 'auth'], function ($routes) {
+    $routes->get('checkout',         'Shop::checkout');
+    $routes->post('checkout',        'Shop::processCheckout');
+    $routes->post('ulasan',          'Shop::kirimUlasan');
+    $routes->get('riwayat',          'Shop::riwayat');
+    $routes->get('nota/(:num)',      'Shop::nota/$1');
+});
 
-$routes->get('pelanggan/delete/(:num)', 'pelanggan::delete/$1');
+// ============================================================
+// 5. ADMIN
+// ============================================================
+$routes->group('admin', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/',              'Admin\Dashboard::index');
+    $routes->get('dashboard',      'Admin\Dashboard::index');
 
-//<----- TRANSAKSI ----->
-$routes->get('transaksi', 'transaksi::index');
-$routes->get('transaksi/new', 'transaksi::new');
-$routes->post('transaksi/create', 'transaksi::create');
+    // ===== BARANG =====
+    $routes->group('barang', function ($routes) {
+        $routes->get('/',                    'Admin\Barang::index');
+        $routes->get('getProducts',          'Admin\Barang::getProducts');
+        $routes->get('getProduct/(:num)',    'Admin\Barang::getProduct/$1');
+        $routes->post('create',              'Admin\Barang::create');
+        $routes->post('update/(:num)',       'Admin\Barang::update/$1');
+        $routes->delete('delete/(:num)',     'Admin\Barang::delete/$1');
+    });
 
-$routes->get('transaksi/edit/(:num)', 'transaksi::edit/$1');
-$routes->post('transaksi/update/(:num)', 'transaksi::update/$1');
+    // ===== PELANGGAN (READ ONLY) =====
+    $routes->group('pelanggan', function ($routes) {
+        $routes->get('/', 'Admin\Pelanggan::index');
+    });
 
-$routes->get('transaksi/delete/(:num)', 'transaksi::delete/$1');
+    // ===== TRANSAKSI =====
+    $routes->group('transaksi', function ($routes) {
+        $routes->get('/',                               'Admin\Transaksi::index');
+        $routes->post('update-status',                  'Admin\Transaksi::updateStatusPost');
+        $routes->get('updateStatus/(:num)/(:any)',      'Admin\Transaksi::updateStatus/$1/$2');
+        $routes->get('getDetail/(:num)',                'Admin\Transaksi::getDetail/$1');
+        $routes->post('verifikasiPembayaran',           'Admin\Transaksi::verifikasiPembayaran');
+        $routes->post('verifikasiPembayaranCOD',        'Admin\Transaksi::verifikasiPembayaranCOD');
+    });
 
-//<----- DETAIL TRANSAKSI ----->
-$routes->get('detailtransaksi', 'detailtransaksi::index');
-$routes->get('detailtransaksi/new', 'detailtransaksi::new');
-$routes->post('detailtransaksi/create', 'detailtransaksi::create');
+   // / ===== ULASAN =====
+$routes->group('ulasan', function ($routes) {
+    $routes->get('/', 'Admin\Ulasan::index');
+    $routes->post('update-status', 'Admin\Ulasan::updateStatus');
+    $routes->post('balas', 'Admin\Ulasan::balas');
+    $routes->delete('hapus/(:num)', 'Admin\Ulasan::hapus/$1');
+});
 
-$routes->get('detailtransaksi/edit/(:num)', 'detailtransaksi::edit/$1');
-$routes->post('detailtransaksi/update/(:num)', 'detailtransaksi::update/$1');
+    // ===== LAPORAN  =====
+    $routes->group('laporan', function ($routes) {
+        $routes->get('/',                    'Admin\Laporan::index');
+        $routes->get('transaksi',            'Admin\Laporan::transaksi');
+        $routes->get('barang',               'Admin\Laporan::barang');
+        $routes->get('cetakpdf_transaksi', 'Admin\Laporan::cetakpdf_transaksi');
+        $routes->get('cetakpdf_penjualan', 'Admin\Laporan::cetakpdf_penjualan');
+        $routes->get('cetakpdf_barang', 'Admin\Laporan::cetakpdf_barang'); 
+        $routes->get('cetak-excel',          'Admin\Laporan::cetakExcel');
+    });
+});
 
-$routes->get('detailtransaksi/delete/(:num)', 'detailtransaksi::delete/$1');
+// ============================================================
+// 6. USER DASHBOARD & PROFILE
+// ============================================================
+$routes->group('user', ['filter' => 'auth'], function ($routes) {
+    $routes->get('dashboard',     'User::dashboard');
+    $routes->get('getProfile',    'User::getProfile');     
+    $routes->post('updateProfile', 'User::updateProfile');  
+});
 
-$routes->get('transaksi/show/(:num)', 'Transaksi::show/$1');
-
-
+// ===== ULASAN =====
+$routes->group('ulasan', ['filter' => 'auth'], function ($routes) {
+    $routes->post('tambah', 'Ulasan::tambah');
+    $routes->get('produk/(:num)', 'Ulasan::getByProduk/$1');
+});
